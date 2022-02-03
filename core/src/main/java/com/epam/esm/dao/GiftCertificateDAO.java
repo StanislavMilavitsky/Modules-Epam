@@ -11,9 +11,9 @@ public interface GiftCertificateDAO {
 
    GiftCertificate read(Long id) throws DAOException;
 
-   boolean update(GiftCertificateDTO giftCertificateDTO) throws DAOException;
+   int update(GiftCertificateDTO giftCertificateDTO) throws DAOException;
 
-   boolean delete(Long id) throws DAOException;
+   int delete(Long id) throws DAOException;
 
 
 }
