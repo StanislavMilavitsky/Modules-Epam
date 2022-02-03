@@ -1,4 +1,4 @@
-package esm.entity;
+package com.epam.esm.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package esm.dao.exception;
+package com.epam.esm.dao.exception;
 
 public class DAOException extends Exception {
 
