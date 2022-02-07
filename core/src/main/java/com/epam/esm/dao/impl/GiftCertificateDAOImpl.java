@@ -37,23 +37,29 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
 
     @Override
     public GiftCertificate create(GiftCertificate giftCertificate) throws DAOException {
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("name", giftCertificate.getName());
-        parameters.put("description", giftCertificate.getDescription());
-        parameters.put("price", giftCertificate.getPrice());
-        parameters.put("duration", giftCertificate.getDuration());
-        parameters.put("create_date", giftCertificate.getCreateDate());
-        parameters.put("last_update_date", giftCertificate.getLastUpdateDate());
-        Number id = jdbcInsert.executeAndReturnKey(parameters);
-        giftCertificate.setId(id.longValue());
-        return giftCertificate;
+        try{
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("name", giftCertificate.getName());
+            parameters.put("description", giftCertificate.getDescription());
+            parameters.put("price", giftCertificate.getPrice());
+            parameters.put("duration", giftCertificate.getDuration());
+            parameters.put("create_date", giftCertificate.getCreateDate());
+            parameters.put("last_update_date", giftCertificate.getLastUpdateDate());
+            Number id = jdbcInsert.executeAndReturnKey(parameters);
+            giftCertificate.setId(id.longValue());
+            return giftCertificate;
+        } catch (DataAccessException ex){
+            logger.error("Create gift certificate exception", ex);
+            throw new DAOException("Create gift certificate exception", ex);
+        }
+
     }
 
     @Override
     public GiftCertificate read(Long id) throws DAOException {
         try{
             return jdbcTemplate.queryForObject(READ_GIFT_CERTIFICATE_BY_ID_SQL, new GiftCertificateMapper(), id); //new BeanPropertyRowMapper<>(Person.class())
-        } catch (DataAccessException ex){
+        } catch (DataAccessException ex){//todo
             logger.error("Read gift certificate exception", ex);
             throw new DAOException("Read gift certificate exception", ex);
         }
@@ -61,14 +67,15 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     }
 
     @Override
-    public int update(GiftCertificateDTO giftCertificateDTO) throws DAOException {
+    public long update(GiftCertificateDTO giftCertificateDTO) throws DAOException {
         return false;
     }
 
     @Override
-    public int delete(Long id) throws DAOException {
+    public long delete(Long id) throws DAOException {
         try{
-            return jdbcTemplate.update(DELETE_GIFT_CERTIFICATE_BY_ID_SQL, id);
+            int rows = jdbcTemplate.update(DELETE_GIFT_CERTIFICATE_BY_ID_SQL, id);
+            return rows > 0L ? id : -1L;
         } catch (DataAccessException ex){
             logger.error("Delete gift certificate exception", ex);
             throw new DAOException("Delete gift certificate exception", ex);
