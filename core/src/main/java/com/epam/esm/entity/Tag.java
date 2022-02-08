@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+/**
+ * Entity dao and the fields should not change
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

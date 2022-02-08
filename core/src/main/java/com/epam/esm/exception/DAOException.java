@@ -1,5 +1,8 @@
-package com.epam.esm.dao.exception;
+package com.epam.esm.exception;
 
+/**
+ * Exception from dao layer
+ */
 public class DAOException extends Exception {
 
     public DAOException() {

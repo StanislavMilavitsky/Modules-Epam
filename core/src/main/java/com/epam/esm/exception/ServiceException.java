@@ -1,5 +1,8 @@
-package com.epam.esm.service.exception;
+package com.epam.esm.exception;
 
+/**
+ * Exception from service layer
+ */
 public class ServiceException extends Exception {
 
     public ServiceException() {

@@ -1,17 +1,18 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.GiftCertificateDAO;
-import com.epam.esm.dao.exception.DAOException;
-import com.epam.esm.dao.mapper.GiftCertificateMapper;
+import com.epam.esm.exception.DAOException;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.service.dto.GiftCertificateDTO;
+import com.epam.esm.dto.GiftCertificateDTO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,7 +59,7 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     @Override
     public GiftCertificate read(Long id) throws DAOException {
         try{
-            return jdbcTemplate.queryForObject(READ_GIFT_CERTIFICATE_BY_ID_SQL, new GiftCertificateMapper(), id); //new BeanPropertyRowMapper<>(Person.class())
+            return jdbcTemplate.queryForObject(READ_GIFT_CERTIFICATE_BY_ID_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class), id);
         } catch (DataAccessException ex){//todo
             logger.error("Read gift certificate exception", ex);
             throw new DAOException("Read gift certificate exception", ex);
@@ -68,7 +69,7 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
 
     @Override
     public long update(GiftCertificateDTO giftCertificateDTO) throws DAOException {
-        return false;
+        return 1;
     }
 
     @Override
