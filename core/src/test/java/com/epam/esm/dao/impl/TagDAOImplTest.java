@@ -37,19 +37,19 @@ class TagDAOImplTest {
         Tag tag = new Tag();
         tag.setName("movie");
         Tag actual = this.tagDAO.create(tag);
-        assertEquals(actual, new Tag(6L,"movie"));
+        assertEquals(new Tag(6L,"movie"), actual);
     }
 
     @Test
     void read() {
         Tag actual = tagDAO.read(1L);
         Tag expected = new Tag(1L, "sport");
-        assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
     @Test
     void delete() {
         long actual = tagDAO.delete(3L);
-        assertEquals(actual, 3L);
+        assertEquals(3L, actual);
     }
 }

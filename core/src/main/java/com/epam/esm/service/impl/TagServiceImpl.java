@@ -22,7 +22,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDTO find(Long id) throws ServiceException {
+    public TagDTO find(Long id) throws ServiceException {//todo тут через ошибку или лучше не выкидывать?
             Tag tag = tagDAO.read(id);
             TagDTO tagDTO = tagConverter.toDTO(tag);
             return tagDTO;//todo if object == null then throw exception

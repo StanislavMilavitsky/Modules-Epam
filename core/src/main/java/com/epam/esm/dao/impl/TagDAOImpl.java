@@ -14,7 +14,7 @@ import java.util.Map;
 public class TagDAOImpl implements TagDAO {
 
     private final static Logger logger = Logger.getLogger(TagDAOImpl.class);
-    private final static String READ_TAG_SQL = "SELECT name FROM tag WHERE id=?";
+    private final static String READ_TAG_SQL = "SELECT id, name FROM tag WHERE id=?";
     private final static String DELETE_TAG_SQL = "DELETE FROM tag WHERE id=?";
 
     private final JdbcTemplate jdbcTemplate;

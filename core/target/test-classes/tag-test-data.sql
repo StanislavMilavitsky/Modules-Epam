@@ -1,5 +1,5 @@
-INSERT INTO tag (id,name) VALUES (1,'sport');
-INSERT INTO tag (id,name) VALUES (2,'music');
-INSERT INTO tag (id,name) VALUES (3,'lasertag');
-INSERT INTO tag (id,name) VALUES (4,'paintball');
-INSERT INTO tag (id,name) VALUES (5,'shopping');
+INSERT INTO tag (name) VALUES ('sport');
+INSERT INTO tag (name) VALUES ('music');
+INSERT INTO tag (name) VALUES ('lasertag');
+INSERT INTO tag (name) VALUES ('paintball');
+INSERT INTO tag (name) VALUES ('shopping');
