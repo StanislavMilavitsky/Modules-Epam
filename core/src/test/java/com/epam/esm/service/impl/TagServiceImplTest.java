@@ -40,7 +40,7 @@ class TagServiceImplTest {
     void testFindTagPositive() throws ServiceException {
         lenient().when(tagDAO.read(anyLong())).thenReturn(correctTag);
         TagDTO actual = tagService.find(1L);
-        assertEquals(actual, correctTagDTO);
+        assertEquals(correctTagDTO, actual);
     }
 
     @Test
@@ -48,34 +48,34 @@ class TagServiceImplTest {
         lenient().when(tagDAO.read(anyLong())).thenReturn(correctTag);
         TagDTO actual = tagService.find(1L);
         TagDTO expected = new TagDTO(1L, "names");
-        assertNotEquals(actual, expected);
+        assertNotEquals(expected, actual);
     }
 
     @Test
     void testAddPositive() throws ServiceException {
         lenient().when(tagDAO.create(any(Tag.class))).thenReturn(correctTag);
         TagDTO actual = tagService.add(correctTagDTO);
-        assertEquals(actual, correctTagDTO);
+        assertEquals(correctTagDTO, actual);
     }
 
     @Test
     void testAddNegative() throws ServiceException {
         lenient().when(tagDAO.create(any(Tag.class))).thenReturn(correctTag);
         TagDTO actual = tagService.add(correctTagDTO);
-        assertNotEquals(actual, new TagDTO());
+        assertNotEquals(new TagDTO(), actual);
     }
 
     @Test
     void testDeletePositive() throws ServiceException {
         lenient().when(tagDAO.delete(anyLong())).thenReturn(1L);
         long actual = tagService.delete(1L);
-        assertEquals(actual, 1L);
+        assertEquals(1L, actual);
     }
 
     @Test
     void testDeleteNegative() throws ServiceException {
         lenient().when(tagDAO.delete(anyLong())).thenReturn(1L);
         long actual = tagService.delete(1L);
-        assertNotEquals(actual, 2L);
+        assertNotEquals(2L, actual);
     }
 }
