@@ -87,11 +87,11 @@ class GiftCertificateDAOImplTest {
     }
 
     @Test
-    void findByTag() {
-    }
-
-    @Test
-    void searchByNameOrDesc() {
+    void testSearchByNameOrDescPositive() {
+        List<GiftCertificate> actual = giftCertificateDAO.searchByNameOrDescription("Sport");
+        List<GiftCertificate> expected = new ArrayList<>();
+        expected.add(expectedTwo);
+        assertEquals(expected, actual);
     }
 
     @Test

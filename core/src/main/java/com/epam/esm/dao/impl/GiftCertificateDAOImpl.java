@@ -26,8 +26,8 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
             "JOIN gift_certificate_has_tag gct ON gc.id = gct.id_gift_certificate " +
             "JOIN tag t ON gct.id_tag = t.id WHERE t.name = ?" ;
     private static final String PERCENT = "%";
-    private static final String SELECT_BY_NAME_OR_DESC_SQL = "SELECT gc.id, name, description, price, duration," +
-            " create_date, last_update_date FROM gift_certificate gc WHERE name OR description LIKE ?";
+    private static final String SELECT_BY_NAME_OR_DESCRIPTION_SQL = "SELECT gc.id, gc.name, gc.description, gc.price, gc.duration," +
+            " gc.create_date, gc.last_update_date FROM gift_certificate gc WHERE gc.name OR gc.description LIKE ?";
     private static final String SORT_BY_DATE_SQL = "SELECT gc.id, name, description, price, duration, create_date, last_update_date" +
             " FROM gift_certificate gc ORDER BY gc.create_date ";
     private static final String SORT_BY_NAME_SQL = "SELECT gc.id, name, description, price, duration, create_date, last_update_date" +
@@ -37,7 +37,7 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
-    private List<GiftCertificate> giftCertificates;
+    private List<GiftCertificate> giftCertificates; //todo
 
     @Autowired
     public GiftCertificateDAOImpl(JdbcTemplate jdbcTemplate){
@@ -92,7 +92,7 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     public List<GiftCertificate> searchByNameOrDescription(String part) {
         String sqlPart = PERCENT + part + PERCENT;
         List<GiftCertificate> giftCertificates =
-                jdbcTemplate.query(SELECT_BY_NAME_OR_DESC_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class),
+                jdbcTemplate.query(SELECT_BY_NAME_OR_DESCRIPTION_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class),
                         sqlPart);
         return giftCertificates;
     }

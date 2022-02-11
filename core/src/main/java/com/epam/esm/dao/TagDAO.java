@@ -7,7 +7,7 @@ import com.epam.esm.entity.Tag;
  */
 public interface TagDAO {
     /**
-     * Create an entity from database with fields from Tag
+     * Create an entity in database with fields from Tag
      * @param tag is entity
      * @return entity Tag with auto generated key
      */
@@ -16,7 +16,7 @@ public interface TagDAO {
     /**
      * Read an entity Tag from database by id
      * @param id is field from Tag
-     * @return entity Tag
+     * @return entity Tag or null
      */
     Tag read(Long id);
 

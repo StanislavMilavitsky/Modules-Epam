@@ -100,7 +100,7 @@ public class GiftCertificateController {
     @GetMapping("/byPart/{part}")
     public ResponseEntity<List<GiftCertificateDTO>> searchByNameOrDesc(@PathVariable(name = "part") String part)
             throws ServiceException {
-        List<GiftCertificateDTO> giftCertificateDTO = giftCertificateService.searchByNameOrDesc(part);
+        List<GiftCertificateDTO> giftCertificateDTO = giftCertificateService.searchByNameOrDescription(part);
         return ResponseEntity.ok(giftCertificateDTO);
     }
 

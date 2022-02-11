@@ -43,8 +43,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Transactional
     @Override
-    public GiftCertificateDTO update(GiftCertificateDTO certificateDTO) throws ServiceException {
-        long id = giftCertificateDAO.update(certificateDTO);
+    public GiftCertificateDTO update(GiftCertificateDTO giftCertificateDTO) throws ServiceException {
+        long id = giftCertificateDAO.update(giftCertificateDTO);
         if (id == -1L) {
             return new GiftCertificateDTO();
         }
@@ -65,7 +65,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificateDTO> searchByNameOrDesc(String part) throws ServiceException {
+    public List<GiftCertificateDTO> searchByNameOrDescription(String part) throws ServiceException {
             List<GiftCertificate> certificates = giftCertificateDAO.searchByNameOrDescription(part);
             return certificates.stream().map(giftCertificateConverter::toDTO).collect(Collectors.toList());
     }
