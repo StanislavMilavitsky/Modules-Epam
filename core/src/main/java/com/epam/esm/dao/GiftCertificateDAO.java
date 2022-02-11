@@ -21,7 +21,7 @@ public interface GiftCertificateDAO {
 
    List<GiftCertificate> findByTag(String tag);
 
-   List<GiftCertificate> searchByNameOrDesc(String part);
+   List<GiftCertificate> searchByNameOrDescription(String part);
 
    List<GiftCertificate> sortByDate(SortType sortType);
 

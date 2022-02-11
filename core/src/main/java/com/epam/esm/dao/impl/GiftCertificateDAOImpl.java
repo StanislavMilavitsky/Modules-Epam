@@ -32,7 +32,7 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
             " FROM gift_certificate gc ORDER BY gc.create_date ";
     private static final String SORT_BY_NAME_SQL = "SELECT gc.id, name, description, price, duration, create_date, last_update_date" +
             " FROM gift_certificate gc ORDER BY gc.name ";
-    private static final String UPDATE_GIFT_CERTIFICATE_SQL = "UPDATE gift_certificate SET name = ?, description =?, price =?,duration =?," +
+    private static final String UPDATE_GIFT_CERTIFICATE_SQL = "UPDATE gift_certificate SET name = ?, description =?, price =?, duration =?," +
             " last_update_date =? WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
@@ -89,7 +89,7 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     }
 
     @Override
-    public List<GiftCertificate> searchByNameOrDesc(String part) {
+    public List<GiftCertificate> searchByNameOrDescription(String part) {
         String sqlPart = PERCENT + part + PERCENT;
         List<GiftCertificate> giftCertificates =
                 jdbcTemplate.query(SELECT_BY_NAME_OR_DESC_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class),
