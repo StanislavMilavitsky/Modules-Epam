@@ -7,17 +7,21 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.SortType;
 import com.epam.esm.exception.ServiceException;
 import com.epam.esm.service.GiftCertificateService;
-import com.sun.istack.internal.logging.Logger;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.List;
+
 import java.util.stream.Collectors;
 
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
 
-    private final static Logger logger = Logger.getLogger(GiftCertificateServiceImpl.class);
+    private final static Logger logger = LogManager.getLogger(GiftCertificateServiceImpl.class);
     private final GiftCertificateDAO giftCertificateDAO;
     private final GiftCertificateConverter giftCertificateConverter;
 
@@ -34,7 +38,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             return  giftCertificateDTO;
         } else {
             String exception = String.format("Find gift certificate by id =%d exception!", id);
-                    logger.warning(exception);
+                    logger.error(exception);
             throw new ServiceException(exception);
         }
     }
@@ -48,7 +52,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             return giftCertificateConverter.toDTO(addedGiftCertificate);
         } else {
             String exception = String.format("Add gift certificate %s exception!", giftCertificateDTO.getName());
-            logger.warning(exception);
+            logger.error(exception);
             throw new ServiceException(exception);
         }
 
@@ -63,7 +67,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             return giftCertificateConverter.toDTO(certificate);
         } else {
             String exception = String.format("Update gift certificate by id=%d exception!", giftCertificateDTO.getId());
-            logger.warning(exception);
+            logger.error(exception);
             throw new ServiceException(exception);
         }
 
@@ -77,7 +81,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             return result;
         } else {
             String exception = String.format("Delete gift certificate by id=%d exception!", id);
-            logger.warning(exception);
+            logger.error(exception);
             throw new ServiceException(exception);
         }
     }
@@ -89,7 +93,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             return byTag.stream().map(giftCertificateConverter::toDTO).collect(Collectors.toList());
         } else {
             String exception = String.format("Find by tag %s exception!", tagName);
-            logger.warning(exception);
+            logger.error(exception);
             throw new ServiceException(exception);
         }
 
@@ -102,7 +106,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             return giftCertificates.stream().map(giftCertificateConverter::toDTO).collect(Collectors.toList());
         } else {
             String exception = String.format("Search by %s exception", part);
-            logger.warning(exception);
+            logger.error(exception);
             throw new ServiceException(exception);
         }
     }
@@ -113,7 +117,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (giftCertificates != null){
             return giftCertificates.stream().map(giftCertificateConverter::toDTO).collect(Collectors.toList());
         } else {
-            logger.warning("Sort by name exception!");
+            logger.error("Sort by name exception!");
             throw new ServiceException("Sort by name exception!");
         }
     }
@@ -124,7 +128,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (giftCertificates != null){
             return giftCertificates.stream().map(giftCertificateConverter::toDTO).collect(Collectors.toList());
         } else {
-            logger.warning("Sort by date exception!");
+            logger.error("Sort by date exception!");
             throw new ServiceException("Sort by date exception!");
         }
     }

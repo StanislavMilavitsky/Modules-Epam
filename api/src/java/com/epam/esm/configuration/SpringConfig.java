@@ -1,9 +1,7 @@
 package com.epam.esm.configuration;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -21,7 +19,7 @@ import javax.sql.DataSource;
 @PropertySource("classpath:application-${spring.profiles.active}.properties")
 public class SpringConfig implements WebMvcConfigurer {
     /**
-     * Environment from spring container(environments get from application.properties)
+     * Environment from spring container(environments get from application-dev.properties)
      */
     private Environment environment;
 
@@ -53,6 +51,28 @@ public class SpringConfig implements WebMvcConfigurer {
     @Bean
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
+    }
+
+    @Bean
+    @Profile("prod")
+    public BasicDataSource prodConnection(){
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName(environment.getProperty("datasource.driverClassName"));
+        dataSource.setUrl(environment.getProperty("datasource.url"));
+        dataSource.setUsername(environment.getProperty("datasource.username"));
+        dataSource.setPassword(System.getenv(environment.getProperty("datasource.password.env")));
+        return dataSource;
+    }
+
+    @Bean
+    @Profile("dev")
+    public BasicDataSource devConnection(){
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName(environment.getProperty("datasource.driverClassName"));
+        dataSource.setUrl(environment.getProperty("datasource.url"));
+        dataSource.setUsername(environment.getProperty("datasource.username"));
+        dataSource.setPassword(System.getenv(environment.getProperty("datasource.password.env")));
+        return dataSource;
     }
 
 }

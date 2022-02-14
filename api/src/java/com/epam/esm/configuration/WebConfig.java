@@ -1,5 +1,6 @@
 package com.epam.esm.configuration;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -11,6 +12,7 @@ import javax.servlet.ServletRegistration;
 /**
  * Initialize web project and use configuration
  */
+@Configuration
 public class WebConfig implements WebApplicationInitializer {
     /**
      * Configures the servlet, connects listeners, filters, etc.
@@ -26,6 +28,9 @@ public class WebConfig implements WebApplicationInitializer {
             ServletRegistration.Dynamic registration = servletContext.addServlet("app", servlet);
             registration.setLoadOnStartup(1);
             registration.addMapping("/app/*");
+
+            servletContext.setInitParameter(
+                "spring.profiles.active", "dev");
         }
     }
 
