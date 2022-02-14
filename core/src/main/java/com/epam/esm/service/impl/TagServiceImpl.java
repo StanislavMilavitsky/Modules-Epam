@@ -6,7 +6,7 @@ import com.epam.esm.dto.TagDTO;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.ServiceException;
 import com.epam.esm.service.TagService;
-import org.apache.log4j.Logger;
+import com.sun.istack.internal.logging.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,25 +22,43 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDTO find(Long id) throws ServiceException {//todo тут через ошибку или лучше не выкидывать?
+    public TagDTO find(Long id) throws ServiceException {
             Tag tag = tagDAO.read(id);
             TagDTO tagDTO = tagConverter.toDTO(tag);
-            return tagDTO;//todo if object == null then throw exception
+            if (tagDTO != null){
+                return tagDTO;
+            } else {
+                logger.warning("Find tag exception!");
+                throw new ServiceException("Find tag exception!");
+            }
+
 
     }
 
     @Transactional
     @Override
-    public TagDTO add(TagDTO tagDTO) {
+    public TagDTO add(TagDTO tagDTO) throws ServiceException {
             Tag tag = tagConverter.fromDTO(tagDTO);
             Tag tagDao = this.tagDAO.create(tag);
-            return tagConverter.toDTO(tagDao);
+            if (tagDao != null){
+                return tagConverter.toDTO(tagDao);
+            } else {
+                logger.warning("Add tag exception!");
+                throw new ServiceException("Add tag exception!");
+            }
+
     }
 
     @Transactional
     @Override
     public long delete(Long id) throws ServiceException {
             long isDelete = tagDAO.delete(id);
-            return isDelete;
+            if(isDelete != -1){
+                return isDelete;
+            } else {
+                logger.warning("Delete tag exception!");
+                throw new ServiceException("Delete tag exception!");
+            }
+
     }
 }

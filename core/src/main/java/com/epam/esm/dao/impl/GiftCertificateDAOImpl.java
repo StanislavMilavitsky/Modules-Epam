@@ -27,7 +27,7 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
             "JOIN tag t ON gct.id_tag = t.id WHERE t.name = ?" ;
     private static final String PERCENT = "%";
     private static final String SELECT_BY_NAME_OR_DESCRIPTION_SQL = "SELECT gc.id, gc.name, gc.description, gc.price, gc.duration," +
-            " gc.create_date, gc.last_update_date FROM gift_certificate gc WHERE gc.name OR gc.description LIKE ?";
+            " gc.create_date, gc.last_update_date FROM gift_certificate gc WHERE gc.name LIKE ?";
     private static final String SORT_BY_DATE_SQL = "SELECT gc.id, name, description, price, duration, create_date, last_update_date" +
             " FROM gift_certificate gc ORDER BY gc.create_date ";
     private static final String SORT_BY_NAME_SQL = "SELECT gc.id, name, description, price, duration, create_date, last_update_date" +
@@ -37,7 +37,6 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
-    private List<GiftCertificate> giftCertificates; //todo
 
     @Autowired
     public GiftCertificateDAOImpl(JdbcTemplate jdbcTemplate){
@@ -49,7 +48,7 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     @Override
     public GiftCertificate create(GiftCertificate giftCertificate){
             Map<String, Object> parameters = new HashMap<>();
-            parameters.put("name", giftCertificate.getName());
+            parameters.put("name", giftCertificate.getName());//todo изменить
             parameters.put("description", giftCertificate.getDescription());
             parameters.put("price", giftCertificate.getPrice());
             parameters.put("duration", giftCertificate.getDuration());
@@ -63,7 +62,7 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
 
 
     @Override
-    public GiftCertificate read(Long id){
+    public GiftCertificate read(Long id){//todo если не подключится к базе данных exception ?
             return jdbcTemplate.queryForObject(READ_GIFT_CERTIFICATE_BY_ID_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class), id);
     }
 
@@ -82,19 +81,15 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
 
     @Override
     public List<GiftCertificate> findByTag(String tag) {
-        List<GiftCertificate> giftCertificates =
-                jdbcTemplate.query(SELECT_GIFT_CERTIFICATE_BY_TAG_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class),
-                tag);
-        return giftCertificates;//todo как лушче возвращать
+        return jdbcTemplate.query(SELECT_GIFT_CERTIFICATE_BY_TAG_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class),
+        tag);
     }
 
     @Override
     public List<GiftCertificate> searchByNameOrDescription(String part) {
         String sqlPart = PERCENT + part + PERCENT;
-        List<GiftCertificate> giftCertificates =
-                jdbcTemplate.query(SELECT_BY_NAME_OR_DESCRIPTION_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class),
-                        sqlPart);
-        return giftCertificates;
+        return jdbcTemplate.query(SELECT_BY_NAME_OR_DESCRIPTION_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class),
+                sqlPart);
     }
 
     @Override
@@ -103,9 +98,7 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
         if (sortType == SortType.DESC){
             builder.append(SortType.DESC.name());
         }
-        List<GiftCertificate> giftCertificates =
-                jdbcTemplate.query(builder.toString(), new BeanPropertyRowMapper<>(GiftCertificate.class));
-        return giftCertificates;
+        return jdbcTemplate.query(builder.toString(), new BeanPropertyRowMapper<>(GiftCertificate.class));
     }
 
     @Override
@@ -114,8 +107,6 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
         if(sortType == SortType.DESC){
             builder.append(SortType.DESC.name());
         }
-        List<GiftCertificate> giftCertificates =
-                jdbcTemplate.query(builder.toString(), new BeanPropertyRowMapper<>(GiftCertificate.class));
-        return giftCertificates;
+        return jdbcTemplate.query(builder.toString(), new BeanPropertyRowMapper<>(GiftCertificate.class));
     }
 }

@@ -20,7 +20,7 @@ public interface TagService {
      * @param tagDTO entity
      * @return entity with generate key
      */
-    TagDTO add(TagDTO tagDTO);
+    TagDTO add(TagDTO tagDTO) throws ServiceException;
 
     /**
      * Use method delete from dao layer

@@ -25,7 +25,7 @@ public interface GiftCertificateDAO {
    GiftCertificate read(Long id);
 
    /**
-    *  Update entity in database without id and create date
+    * Update entity in database without id and create date
     * @param giftCertificateDTO entity from service layer
     * @return id if update and -1 if entity has not been updated
     */
