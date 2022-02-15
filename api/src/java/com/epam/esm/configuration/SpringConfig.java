@@ -20,12 +20,13 @@ import javax.sql.DataSource;
 @ComponentScan("com.epam.esm")
 @EnableWebMvc
 @PropertySource("classpath:application-dev.properties")
-public class SpringConfig implements WebMvcConfigurer {
+public class SpringConfig implements EnvironmentAware {
     /**
      * Environment from spring container(environments get from application-dev.properties)
      */
     private Environment environment;
 
+    @Override
     public void setEnvironment(Environment environment) {
         this.environment = environment;
     }
@@ -41,8 +42,9 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public BasicDataSource dataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+
         dataSource.setDriverClassName(environment.getProperty("datasource.driverClassName"));
         dataSource.setUrl(environment.getProperty("datasource.url"));
         dataSource.setUsername(environment.getProperty("datasource.username"));
@@ -83,7 +85,7 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 */
     @Bean
-    public PlatformTransactionManager transactionManager(BasicDataSource dataSource) {
+    public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 

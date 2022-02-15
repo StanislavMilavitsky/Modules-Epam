@@ -3,11 +3,17 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.GiftCertificateDTO;
 import com.epam.esm.entity.SortType;
+import com.epam.esm.exception.ControllerException;
 import com.epam.esm.exception.ServiceException;
 import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.service.impl.GiftCertificateServiceImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -17,6 +23,7 @@ import java.util.List;
 @RequestMapping("/certificate")
 public class GiftCertificateController {
 
+    private final static Logger logger = LogManager.getLogger(GiftCertificateServiceImpl.class);
 
     private final GiftCertificateService giftCertificateService;
 
@@ -45,7 +52,12 @@ public class GiftCertificateController {
      * @throws ServiceException the service exception
      */
     @PostMapping(value = "/")
-    public ResponseEntity<GiftCertificateDTO> add(@RequestBody GiftCertificateDTO giftCertificateDTO) throws ServiceException {
+    public ResponseEntity<GiftCertificateDTO> add(@RequestBody @Valid GiftCertificateDTO giftCertificateDTO,
+                                                  BindingResult bindingResult) throws ServiceException, ControllerException {
+        if (bindingResult.hasErrors()){
+            logger.error("Wrong value of fields gift certificate");
+            throw new ControllerException("Wrong value of fields gift certificate");
+        }
         GiftCertificateDTO result = giftCertificateService.add(giftCertificateDTO);
         return ResponseEntity.ok(result);
     }
@@ -58,7 +70,12 @@ public class GiftCertificateController {
      * @throws ServiceException the service exception
      */
     @PutMapping(value = "/", consumes = "application/json")
-    public ResponseEntity<GiftCertificateDTO> update(@RequestBody GiftCertificateDTO giftCertificateDTO) throws ServiceException {
+    public ResponseEntity<GiftCertificateDTO> update(@RequestBody @Valid GiftCertificateDTO giftCertificateDTO,
+                                                     BindingResult bindingResult) throws ServiceException, ControllerException {
+        if (bindingResult.hasErrors()){
+            logger.error("Wrong value of fields gift certificate");
+            throw new ControllerException("Wrong value of fields gift certificate");
+        }
         GiftCertificateDTO result = giftCertificateService.update(giftCertificateDTO);
         return ResponseEntity.ok(result);
     }

@@ -24,4 +24,5 @@ public class MVCDispatcherServletInitializer extends AbstractAnnotationConfigDis
     protected String[] getServletMappings() {
         return new String[] {"/"};
     }
+
 }
