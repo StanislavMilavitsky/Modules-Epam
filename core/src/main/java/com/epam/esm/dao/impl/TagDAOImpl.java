@@ -5,18 +5,17 @@ import com.epam.esm.entity.Tag;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
 
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.epam.esm.dao.table.TagSQLField.tagId;
-import static com.epam.esm.dao.table.TagSQLField.tagName;
-
+@Repository
 public class TagDAOImpl implements TagDAO {
 
-    private final static String READ_TAG_SQL = String.format("SELECT %s, %s FROM tag WHERE %s=?", tagId, tagName, tagId);
-    private final static String DELETE_TAG_SQL = String.format("DELETE FROM tag WHERE %s=?", tagId);
+    private final static String READ_TAG_SQL = "SELECT id, name FROM tag WHERE id = ?";
+    private final static String DELETE_TAG_SQL = "DELETE FROM tag WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;

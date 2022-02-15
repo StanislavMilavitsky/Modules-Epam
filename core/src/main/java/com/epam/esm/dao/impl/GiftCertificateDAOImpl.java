@@ -35,6 +35,13 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     private static final String UPDATE_GIFT_CERTIFICATE_SQL = "UPDATE gift_certificate SET name = ?, description =?, price =?, duration =?," +
             " last_update_date =? WHERE id = ?";
 
+    public static final String NAME = "name";
+    public static final String DESCRIPTION = "description";
+    public static final String PRICE = "price";
+    public static final String DURATION = "duration";
+    public static final String CREATE_DATE = "create_date";
+    public static final String LAST_UPDATE_DATE = "last_update_date";
+
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
@@ -48,12 +55,12 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     @Override
     public GiftCertificate create(GiftCertificate giftCertificate){
             Map<String, Object> parameters = new HashMap<>();
-            parameters.put("name", giftCertificate.getName());//todo изменить
-            parameters.put("description", giftCertificate.getDescription());
-            parameters.put("price", giftCertificate.getPrice());
-            parameters.put("duration", giftCertificate.getDuration());
-            parameters.put("create_date", giftCertificate.getCreateDate());
-            parameters.put("last_update_date", giftCertificate.getLastUpdateDate());
+            parameters.put(NAME, giftCertificate.getName());
+            parameters.put(DESCRIPTION, giftCertificate.getDescription());
+            parameters.put(PRICE, giftCertificate.getPrice());
+            parameters.put(DURATION, giftCertificate.getDuration());
+            parameters.put(CREATE_DATE, giftCertificate.getCreateDate());
+            parameters.put(LAST_UPDATE_DATE, giftCertificate.getLastUpdateDate());
             Number id = jdbcInsert.executeAndReturnKey(parameters);
             giftCertificate.setId(id.longValue());
             return giftCertificate;
@@ -62,7 +69,7 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
 
 
     @Override
-    public GiftCertificate read(Long id){//todo если не подключится к базе данных exception ?
+    public GiftCertificate read(Long id){
             return jdbcTemplate.queryForObject(READ_GIFT_CERTIFICATE_BY_ID_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class), id);
     }
 

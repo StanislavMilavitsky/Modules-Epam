@@ -19,8 +19,12 @@
         <module>api</module>
         <module>core</module>
     </modules>
-
     <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>5.3.15</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -31,6 +35,10 @@
             <artifactId>log4j-core</artifactId>
             <version>2.17.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.13.1</version>
+        </dependency>
     </dependencies>
-
-</project>
+   </project>

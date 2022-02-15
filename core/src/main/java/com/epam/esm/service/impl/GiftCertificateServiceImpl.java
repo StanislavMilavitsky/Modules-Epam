@@ -38,7 +38,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             return  giftCertificateDTO;
         } else {
             String exception = String.format("Find gift certificate by id =%d exception!", id);
-                    logger.error(exception);
+            logger.error(exception);
             throw new ServiceException(exception);
         }
     }
