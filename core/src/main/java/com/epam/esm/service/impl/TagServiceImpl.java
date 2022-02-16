@@ -1,5 +1,6 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.exception.DAOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,42 +27,40 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDTO find(Long id) throws ServiceException {
+        try {
             Tag tag = tagDAO.read(id);
-            TagDTO tagDTO = tagConverter.toDTO(tag);
-            if (tagDTO != null){
-                return tagDTO;
-            } else {
-                logger.error("Find tag exception!");
-                throw new ServiceException("Find tag exception!");
-            }
-
-
+            return tagConverter.toDTO(tag);
+        } catch (DAOException exception) {
+            String exceptionMessage = String.format("Find tag by id=%d exception!", id);
+            logger.error(exceptionMessage, exception);
+            throw new ServiceException(exceptionMessage, exception);
+        }
     }
 
     @Transactional
     @Override
     public TagDTO add(TagDTO tagDTO) throws ServiceException {
+        try {
             Tag tag = tagConverter.fromDTO(tagDTO);
             Tag tagDao = this.tagDAO.create(tag);
-            if (tagDao != null){
-                return tagConverter.toDTO(tagDao);
-            } else {
-                logger.error("Add tag exception!");
-                throw new ServiceException("Add tag exception!");
-            }
-
+            return tagConverter.toDTO(tagDao);
+        } catch (DAOException exception) {
+            String exceptionMessage = String.format("Add tag by name=%s exception!", tagDTO.getName());
+            logger.error(exceptionMessage, exception);
+            throw new ServiceException(exceptionMessage, exception);
+        }
     }
 
     @Transactional
     @Override
     public long delete(Long id) throws ServiceException {
-            long isDelete = tagDAO.delete(id);
-            if(isDelete != -1){
-                return isDelete;
-            } else {
-                logger.error("Delete tag exception!");
-                throw new ServiceException("Delete tag exception!");
-            }
+        try {
+            return tagDAO.delete(id);
+        } catch (DAOException exception) {
+            String exceptionMessage = String.format("Delete tag by id=%d exception!", id);
+            logger.error(exceptionMessage, exception);
+            throw new ServiceException(exceptionMessage, exception);
+        }
 
     }
 }

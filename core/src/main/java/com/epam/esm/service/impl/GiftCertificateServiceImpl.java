@@ -5,6 +5,7 @@ import com.epam.esm.dao.GiftCertificateDAO;
 import com.epam.esm.dto.GiftCertificateDTO;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.SortType;
+import com.epam.esm.exception.DAOException;
 import com.epam.esm.exception.ServiceException;
 import com.epam.esm.service.GiftCertificateService;
 
@@ -32,104 +33,101 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public GiftCertificateDTO find(Long id) throws ServiceException {
-        GiftCertificate giftCertificate = giftCertificateDAO.read(id);
-        GiftCertificateDTO giftCertificateDTO = giftCertificateConverter.toDTO(giftCertificate);
-        if (giftCertificateDTO != null) {
-            return  giftCertificateDTO;
-        } else {
-            String exception = String.format("Find gift certificate by id =%d exception!", id);
-            logger.error(exception);
-            throw new ServiceException(exception);
+        try {
+            GiftCertificate giftCertificate = giftCertificateDAO.read(id);
+            return giftCertificateConverter.toDTO(giftCertificate);
+        } catch (DAOException exception) {
+            String exceptionMessage = String.format("Find gift certificate by id=%d exception!", id);
+            logger.error(exceptionMessage, exception);
+            throw new ServiceException(exceptionMessage, exception);
         }
     }
 
     @Transactional
     @Override
     public GiftCertificateDTO add(GiftCertificateDTO giftCertificateDTO) throws ServiceException {
-        GiftCertificate giftCertificate = giftCertificateConverter.fromDTO(giftCertificateDTO);
-        GiftCertificate addedGiftCertificate = giftCertificateDAO.create(giftCertificate);
-        if (addedGiftCertificate != null){
+        try {
+            GiftCertificate giftCertificate = giftCertificateConverter.fromDTO(giftCertificateDTO);
+            GiftCertificate addedGiftCertificate = giftCertificateDAO.create(giftCertificate);
             return giftCertificateConverter.toDTO(addedGiftCertificate);
-        } else {
-            String exception = String.format("Add gift certificate %s exception!", giftCertificateDTO.getName());
-            logger.error(exception);
-            throw new ServiceException(exception);
+        } catch (DAOException exception) {
+            String exceptionMessage = String.format("Add gift certificate by name=%s exception!", giftCertificateDTO.getName());
+            logger.error(exceptionMessage, exception);
+            throw new ServiceException(exceptionMessage, exception);
         }
-
     }
 
     @Transactional
     @Override
     public GiftCertificateDTO update(GiftCertificateDTO giftCertificateDTO) throws ServiceException {
-        long id = giftCertificateDAO.update(giftCertificateDTO);
-        if (id != -1L) {
+        try {
+            long id = giftCertificateDAO.update(giftCertificateDTO);
             GiftCertificate certificate = giftCertificateDAO.read(id);
             return giftCertificateConverter.toDTO(certificate);
-        } else {
-            String exception = String.format("Update gift certificate by id=%d exception!", giftCertificateDTO.getId());
-            logger.error(exception);
-            throw new ServiceException(exception);
+        } catch (DAOException exception) {
+            String exceptionMessage = String.format("Update gift certificate by name=%s exception!", giftCertificateDTO.getName());
+            logger.error(exceptionMessage, exception);
+            throw new ServiceException(exceptionMessage, exception);
         }
-
     }
 
     @Transactional
     @Override
     public long delete(Long id) throws ServiceException {
-        long result = giftCertificateDAO.delete(id);
-        if(result != -1L){
-            return result;
-        } else {
-            String exception = String.format("Delete gift certificate by id=%d exception!", id);
-            logger.error(exception);
-            throw new ServiceException(exception);
+        try {
+            return giftCertificateDAO.delete(id);
+        } catch (DAOException exception) {
+            String exceptionMessage = String.format("Delete gift certificate by id=%d exception!", id);
+            logger.error(exceptionMessage, exception);
+            throw new ServiceException(exceptionMessage, exception);
         }
     }
 
     @Override
     public List<GiftCertificateDTO> findByTag(String tagName) throws ServiceException {
-        List<GiftCertificate> byTag = giftCertificateDAO.findByTag(tagName);
-        if( byTag != null){
+        try {
+            List<GiftCertificate> byTag = giftCertificateDAO.findByTag(tagName);
             return byTag.stream().map(giftCertificateConverter::toDTO).collect(Collectors.toList());
-        } else {
-            String exception = String.format("Find by tag %s exception!", tagName);
-            logger.error(exception);
-            throw new ServiceException(exception);
+        } catch (DAOException exception) {
+            String exceptionMessage = String.format("Find gift certificate by tag=%s exception!", tagName);
+            logger.error(exceptionMessage, exception);
+            throw new ServiceException(exceptionMessage, exception);
         }
-
     }
 
     @Override
     public List<GiftCertificateDTO> searchByNameOrDescription(String part) throws ServiceException {
+        try {
             List<GiftCertificate> giftCertificates = giftCertificateDAO.searchByNameOrDescription(part);
-        if (giftCertificates != null) {
             return giftCertificates.stream().map(giftCertificateConverter::toDTO).collect(Collectors.toList());
-        } else {
-            String exception = String.format("Search by %s exception", part);
-            logger.error(exception);
-            throw new ServiceException(exception);
+        } catch (DAOException exception) {
+            String exceptionMessage = String.format("Find gift certificate by word=%s exception!", part);
+            logger.error(exceptionMessage, exception);
+            throw new ServiceException(exceptionMessage, exception);
         }
     }
 
     @Override
     public List<GiftCertificateDTO> sortByName(SortType sortType) throws ServiceException {
-        List<GiftCertificate> giftCertificates = giftCertificateDAO.sortByName(sortType);
-        if (giftCertificates != null){
+        try {
+            List<GiftCertificate> giftCertificates = giftCertificateDAO.sortByName(sortType);
             return giftCertificates.stream().map(giftCertificateConverter::toDTO).collect(Collectors.toList());
-        } else {
-            logger.error("Sort by name exception!");
-            throw new ServiceException("Sort by name exception!");
+        } catch (DAOException exception) {
+            String exceptionMessage = "Sort gift certificate by name";
+            logger.error(exceptionMessage, exception);
+            throw new ServiceException(exceptionMessage, exception);
         }
     }
 
     @Override
     public List<GiftCertificateDTO> sortByDate(SortType sortType) throws ServiceException {
-        List<GiftCertificate> giftCertificates = giftCertificateDAO.sortByDate(sortType);
-        if (giftCertificates != null){
+        try {
+            List<GiftCertificate> giftCertificates = giftCertificateDAO.sortByDate(sortType);
             return giftCertificates.stream().map(giftCertificateConverter::toDTO).collect(Collectors.toList());
-        } else {
-            logger.error("Sort by date exception!");
-            throw new ServiceException("Sort by date exception!");
+        } catch (DAOException exception) {
+            String exceptionMessage = "Sort gift certificate by date";
+            logger.error(exceptionMessage, exception);
+            throw new ServiceException(exceptionMessage, exception);
         }
     }
 }

@@ -4,7 +4,11 @@ import com.epam.esm.dao.GiftCertificateDAO;
 import com.epam.esm.entity.SortType;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.dto.GiftCertificateDTO;
+import com.epam.esm.exception.DAOException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -18,16 +22,18 @@ import java.util.Map;
 @Repository
 public class GiftCertificateDAOImpl implements GiftCertificateDAO {
 
+    private final static Logger logger = LogManager.getLogger(TagDAOImpl.class);
+
     private static final String READ_GIFT_CERTIFICATE_BY_ID_SQL = "SELECT id, name, description, price, duration," +
             " create_date, last_update_date FROM gift_certificate WHERE id = ?";
     private static final String DELETE_GIFT_CERTIFICATE_BY_ID_SQL = "DELETE FROM gift_certificate WHERE id = ?";
-    private static final String SELECT_GIFT_CERTIFICATE_BY_TAG_SQL = "SELECT gc.id, name, description, price, duration," +
-            " create_date, last_update_date FROM gift_certificate gc " +
+    private static final String SELECT_GIFT_CERTIFICATE_BY_TAG_SQL = "SELECT gc.id, gc.name, gc.description, gc.price, gc.duration," +
+            " gc.create_date, gc.last_update_date FROM gift_certificate gc " +
             "JOIN gift_certificate_has_tag gct ON gc.id = gct.id_gift_certificate " +
             "JOIN tag t ON gct.id_tag = t.id WHERE t.name = ?" ;
     private static final String PERCENT = "%";
     private static final String SELECT_BY_NAME_OR_DESCRIPTION_SQL = "SELECT gc.id, gc.name, gc.description, gc.price, gc.duration," +
-            " gc.create_date, gc.last_update_date FROM gift_certificate gc WHERE gc.name LIKE ?";
+            " gc.create_date, gc.last_update_date FROM gift_certificate gc WHERE gc.name LIKE ? OR gc.description LIKE ?";
     private static final String SORT_BY_DATE_SQL = "SELECT gc.id, name, description, price, duration, create_date, last_update_date" +
             " FROM gift_certificate gc ORDER BY gc.create_date ";
     private static final String SORT_BY_NAME_SQL = "SELECT gc.id, name, description, price, duration, create_date, last_update_date" +
@@ -53,7 +59,8 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     }
 
     @Override
-    public GiftCertificate create(GiftCertificate giftCertificate){
+    public GiftCertificate create(GiftCertificate giftCertificate) throws DAOException{
+        try{
             Map<String, Object> parameters = new HashMap<>();
             parameters.put(NAME, giftCertificate.getName());
             parameters.put(DESCRIPTION, giftCertificate.getDescription());
@@ -64,56 +71,102 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
             Number id = jdbcInsert.executeAndReturnKey(parameters);
             giftCertificate.setId(id.longValue());
             return giftCertificate;
-
+        } catch (DataAccessException exception){
+            String exceptionMessage = String.format("Create gift certificate by name=%s exception sql!", giftCertificate.getName());
+            logger.error(exceptionMessage, exception);
+            throw new DAOException(exceptionMessage, exception);
+        }
         }
 
 
     @Override
-    public GiftCertificate read(Long id){
+    public GiftCertificate read(Long id) throws DAOException {
+        try{
             return jdbcTemplate.queryForObject(READ_GIFT_CERTIFICATE_BY_ID_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class), id);
-    }
-
-    @Override
-    public long update(GiftCertificateDTO giftCertificateDTO)  {
-         int rows = jdbcTemplate.update(UPDATE_GIFT_CERTIFICATE_SQL, giftCertificateDTO.getName(), giftCertificateDTO.getDescription(),
-                giftCertificateDTO.getPrice(), giftCertificateDTO.getDuration(), giftCertificateDTO.getLastUpdateDate(), giftCertificateDTO.getId());
-        return rows > 0L ? giftCertificateDTO.getId() : -1L;
-    }
-
-    @Override
-    public long delete(Long id) {
-        int rows = jdbcTemplate.update(DELETE_GIFT_CERTIFICATE_BY_ID_SQL, id);
-        return rows > 0L ? id : -1L;
-    }
-
-    @Override
-    public List<GiftCertificate> findByTag(String tag) {
-        return jdbcTemplate.query(SELECT_GIFT_CERTIFICATE_BY_TAG_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class),
-        tag);
-    }
-
-    @Override
-    public List<GiftCertificate> searchByNameOrDescription(String part) {
-        String sqlPart = PERCENT + part + PERCENT;
-        return jdbcTemplate.query(SELECT_BY_NAME_OR_DESCRIPTION_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class),
-                sqlPart);
-    }
-
-    @Override
-    public List<GiftCertificate> sortByDate(SortType sortType) {
-        StringBuilder builder = new StringBuilder(SORT_BY_DATE_SQL);
-        if (sortType == SortType.DESC){
-            builder.append(SortType.DESC.name());
+        } catch (DataAccessException exception){
+            String exceptionMessage = String.format("Read gift certificate by id=%d exception sql!", id);
+            logger.error(exceptionMessage, exception);
+            throw new DAOException(exceptionMessage, exception);
         }
-        return jdbcTemplate.query(builder.toString(), new BeanPropertyRowMapper<>(GiftCertificate.class));
     }
 
     @Override
-    public List<GiftCertificate> sortByName(SortType sortType) {
-        StringBuilder builder = new StringBuilder(SORT_BY_NAME_SQL);
-        if(sortType == SortType.DESC){
-            builder.append(SortType.DESC.name());
+    public long update(GiftCertificateDTO giftCertificateDTO) throws DAOException {
+        try{
+            int rows = jdbcTemplate.update(UPDATE_GIFT_CERTIFICATE_SQL, giftCertificateDTO.getName(), giftCertificateDTO.getDescription(),
+                    giftCertificateDTO.getPrice(), giftCertificateDTO.getDuration(), giftCertificateDTO.getLastUpdateDate(), giftCertificateDTO.getId());
+            return rows > 0L ? giftCertificateDTO.getId() : -1L;
+        } catch (DataAccessException exception){
+            String exceptionMessage = String.format("Update gift certificate by name=%s exception sql!", giftCertificateDTO.getName());
+            logger.error(exceptionMessage, exception);
+            throw new DAOException(exceptionMessage, exception);
         }
-        return jdbcTemplate.query(builder.toString(), new BeanPropertyRowMapper<>(GiftCertificate.class));
+
+    }
+
+    @Override
+    public long delete(Long id) throws DAOException {
+        try{
+            int rows = jdbcTemplate.update(DELETE_GIFT_CERTIFICATE_BY_ID_SQL, id);
+            return rows > 0L ? id : -1L;
+        } catch (DataAccessException exception){
+            String exceptionMessage = String.format("Delete gift certificate by id=%d exception sql!", id);
+            logger.error(exceptionMessage, exception);
+            throw new DAOException(exceptionMessage, exception);
+        }
+    }
+
+    @Override
+    public List<GiftCertificate> findByTag(String tag) throws DAOException {
+        try{
+            return jdbcTemplate.query(SELECT_GIFT_CERTIFICATE_BY_TAG_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class), tag);
+        } catch (DataAccessException exception){
+            String exceptionMessage = String.format("Find gift certificate by tag=%s exception sql!", tag);
+            logger.error(exceptionMessage, exception);
+            throw new DAOException(exceptionMessage, exception);
+        }
+    }
+
+    @Override
+    public List<GiftCertificate> searchByNameOrDescription(String part) throws DAOException {
+        try{
+            String sqlPart = PERCENT + part + PERCENT;
+            return jdbcTemplate.query(SELECT_BY_NAME_OR_DESCRIPTION_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class),
+                    sqlPart);
+        } catch (DataAccessException exception){
+            String exceptionMessage = String.format("Find gift certificate by word=%s exception sql!", part);
+            logger.error(exceptionMessage, exception);
+            throw new DAOException(exceptionMessage, exception);
+        }
+    }
+
+    @Override
+    public List<GiftCertificate> sortByDate(SortType sortType) throws DAOException {
+        try{
+            StringBuilder builder = new StringBuilder(SORT_BY_DATE_SQL);
+            if (sortType == SortType.DESC){
+                builder.append(SortType.DESC.name());
+            }
+            return jdbcTemplate.query(builder.toString(), new BeanPropertyRowMapper<>(GiftCertificate.class));
+        } catch (DataAccessException exception){
+            String exceptionMessage = "Sort gift certificate by date exception sql";
+            logger.error(exceptionMessage, exception);
+            throw new DAOException(exceptionMessage, exception);
+        }
+    }
+
+    @Override
+    public List<GiftCertificate> sortByName(SortType sortType) throws DAOException {
+        try{
+            StringBuilder builder = new StringBuilder(SORT_BY_NAME_SQL);
+            if(sortType == SortType.DESC){
+                builder.append(SortType.DESC.name());
+            }
+            return jdbcTemplate.query(builder.toString(), new BeanPropertyRowMapper<>(GiftCertificate.class));
+        }  catch (DataAccessException exception){
+            String exceptionMessage = "Sort gift certificate by name exception sql";
+            logger.error(exceptionMessage, exception);
+            throw new DAOException(exceptionMessage, exception);
+        }
     }
 }

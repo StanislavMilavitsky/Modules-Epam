@@ -25,7 +25,7 @@ public class RestExceptionHandler {
         HttpStatus status = HttpStatus.NOT_FOUND;
         ErrorResponse errorResponse =
                 new ErrorResponse(exception.getLocalizedMessage(),
-                        status.value() * 10 + atomicInteger.getAndIncrement());//todo разобраться
+                        status.value() * 10 + atomicInteger.getAndIncrement());
         return ResponseEntity.status(status).body(errorResponse);
     }
 

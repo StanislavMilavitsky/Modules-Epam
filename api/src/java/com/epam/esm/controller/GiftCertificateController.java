@@ -38,7 +38,7 @@ public class GiftCertificateController {
      * @return the response entity
      * @throws ServiceException the service exception
      */
-    @GetMapping("/{id}")//todo не очень понимаю как сделать, если тип входа лонг
+    @GetMapping("/{id}")
     public ResponseEntity<GiftCertificateDTO> find(@PathVariable(name = "id") Long id) throws ServiceException {
         GiftCertificateDTO giftCertificateDTO = giftCertificateService.find(id);
         return ResponseEntity.ok(giftCertificateDTO);

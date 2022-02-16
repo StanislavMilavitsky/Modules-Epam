@@ -2,6 +2,7 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.DAOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +34,7 @@ class TagDAOImplTest {
     }
 
     @Test
-    void testCreatePositive(){
+    void testCreatePositive() throws DAOException {
         Tag tag = new Tag();
         tag.setName("movie");
         Tag actual = this.tagDAO.create(tag);
@@ -41,14 +42,14 @@ class TagDAOImplTest {
     }
 
     @Test
-    void read() {
+    void read() throws DAOException {
         Tag actual = tagDAO.read(1L);
         Tag expected = new Tag(1L, "sport");
         assertEquals(expected, actual);
     }
 
     @Test
-    void delete() {
+    void delete() throws DAOException {
         long actual = tagDAO.delete(3L);
         assertEquals(3L, actual);
     }

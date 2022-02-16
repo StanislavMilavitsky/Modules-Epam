@@ -1,7 +1,6 @@
 package com.epam.esm.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,10 +10,13 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
+
+/**
+ * Entity service and can be change
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Builder
 public class GiftCertificateDTO {
 
     @NotEmpty

@@ -1,12 +1,10 @@
 package com.epam.esm.configuration;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
  * Initialize web project and use configuration
  */
-@ComponentScan("com.epam.esm")
 public class MVCDispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 

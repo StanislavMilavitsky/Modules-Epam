@@ -4,6 +4,7 @@ import com.epam.esm.converter.impl.TagConverter;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.DAOException;
 import com.epam.esm.exception.ServiceException;
 import com.epam.esm.service.TagService;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,14 +38,14 @@ class TagServiceImplTest {
     }
 
     @Test
-    void testFindTagPositive() throws ServiceException {
+    void testFindTagPositive() throws ServiceException, DAOException {
         lenient().when(tagDAO.read(anyLong())).thenReturn(correctTag);
         TagDTO actual = tagService.find(1L);
         assertEquals(correctTagDTO, actual);
     }
 
     @Test
-    void testFindTagNegative() throws ServiceException {
+    void testFindTagNegative() throws ServiceException, DAOException {
         lenient().when(tagDAO.read(anyLong())).thenReturn(correctTag);
         TagDTO actual = tagService.find(1L);
         TagDTO expected = new TagDTO(1L, "names");
@@ -52,28 +53,28 @@ class TagServiceImplTest {
     }
 
     @Test
-    void testAddPositive() throws ServiceException {
+    void testAddPositive() throws ServiceException, DAOException {
         lenient().when(tagDAO.create(any(Tag.class))).thenReturn(correctTag);
         TagDTO actual = tagService.add(correctTagDTO);
         assertEquals(correctTagDTO, actual);
     }
 
     @Test
-    void testAddNegative() throws ServiceException {
+    void testAddNegative() throws ServiceException, DAOException {
         lenient().when(tagDAO.create(any(Tag.class))).thenReturn(correctTag);
         TagDTO actual = tagService.add(correctTagDTO);
         assertNotEquals(new TagDTO(), actual);
     }
 
     @Test
-    void testDeletePositive() throws ServiceException {
+    void testDeletePositive() throws ServiceException, DAOException {
         lenient().when(tagDAO.delete(anyLong())).thenReturn(1L);
         long actual = tagService.delete(1L);
         assertEquals(1L, actual);
     }
 
     @Test
-    void testDeleteNegative() throws ServiceException {
+    void testDeleteNegative() throws ServiceException, DAOException {
         lenient().when(tagDAO.delete(anyLong())).thenReturn(1L);
         long actual = tagService.delete(1L);
         assertNotEquals(2L, actual);
