@@ -58,7 +58,7 @@ public class GiftCertificateController {
      * @throws ServiceException the service exception
      * @throws ControllerException if entity fields not valid
      */
-    @PostMapping(value = "/")
+    @PostMapping()
     public ResponseEntity<GiftCertificateDTO> add(@RequestBody @Valid GiftCertificateDTO giftCertificateDTO, BindingResult bindingResult)
             throws ServiceException, ControllerException {
         if (bindingResult.hasErrors()){
@@ -77,7 +77,7 @@ public class GiftCertificateController {
      * @throws ServiceException the service exception
      * @throws ControllerException if entity fields not valid
      */
-    @PutMapping(value = "/", consumes = "application/json")
+    @PutMapping()
     public ResponseEntity<GiftCertificateDTO> update(@RequestBody @Valid GiftCertificateDTO giftCertificateDTO,
                                                      BindingResult bindingResult) throws ServiceException, ControllerException {
         if (bindingResult.hasErrors()){
@@ -114,7 +114,7 @@ public class GiftCertificateController {
      * @return the response entity
      * @throws ServiceException the service exception
      */
-    @GetMapping("/byName/{name}")
+    @GetMapping("/list-name/{name}")
     public ResponseEntity<List<GiftCertificateDTO>> findByTag(@PathVariable(name = "name") String tagName)
             throws ServiceException {
         List<GiftCertificateDTO> giftCertificateDTO = giftCertificateService.findByTag(tagName);
@@ -128,7 +128,7 @@ public class GiftCertificateController {
      * @return the response entity
      * @throws ServiceException the service exception
      */
-    @GetMapping("/byPart/{part}")
+    @GetMapping("/list-part/{part}")
     public ResponseEntity<List<GiftCertificateDTO>> searchByNameOrDesc(@PathVariable(name = "part") String part)
             throws ServiceException {
         List<GiftCertificateDTO> giftCertificateDTO = giftCertificateService.searchByNameOrDescription(part);
@@ -141,7 +141,7 @@ public class GiftCertificateController {
      * @return the response entity
      * @throws ServiceException the service exception
      */
-    @GetMapping("/sortByName{sort}")
+    @GetMapping("/sorted-name-list{sort}")
     public ResponseEntity<List<GiftCertificateDTO>> sortByName(@PathVariable(name = "sort") SortType sortType) throws ServiceException {
         List<GiftCertificateDTO> giftCertificateDTO = giftCertificateService.sortByName(sortType);
         return ResponseEntity.ok(giftCertificateDTO);
@@ -153,7 +153,7 @@ public class GiftCertificateController {
      * @return the response entity
      * @throws ServiceException the service exception
      */
-    @GetMapping("/sortByDate{sort}")
+    @GetMapping("/sorted-date-list{sort}")
     public ResponseEntity<List<GiftCertificateDTO>> sortByDate(@PathVariable(name = "sort") SortType sortType) throws ServiceException {
         List<GiftCertificateDTO> giftCertificateDTO = giftCertificateService.sortByDate(sortType);
         return ResponseEntity.ok(giftCertificateDTO);
