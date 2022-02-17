@@ -19,8 +19,7 @@ import java.math.BigDecimal;
 @Data
 public class GiftCertificateDTO {
 
-    @NotEmpty
-    @Positive
+    @Positive(message = "Should be positive")
     private Long id;
 
     @NotEmpty(message = "Name should not be empty")

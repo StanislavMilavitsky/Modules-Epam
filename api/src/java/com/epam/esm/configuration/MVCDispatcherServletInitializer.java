@@ -2,11 +2,19 @@ package com.epam.esm.configuration;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+
 /**
  * Initialize web project and use configuration
  */
 public class MVCDispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        super.onStartup(servletContext);
+        servletContext.setInitParameter("spring.profiles.active", "dev");
+    }
 
     @Override
     protected Class<?>[] getRootConfigClasses() {

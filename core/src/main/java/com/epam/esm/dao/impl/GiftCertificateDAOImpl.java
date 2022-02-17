@@ -14,6 +14,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,7 +96,7 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     public long update(GiftCertificateDTO giftCertificateDTO) throws DAOException {
         try{
             int rows = jdbcTemplate.update(UPDATE_GIFT_CERTIFICATE_SQL, giftCertificateDTO.getName(), giftCertificateDTO.getDescription(),
-                    giftCertificateDTO.getPrice(), giftCertificateDTO.getDuration(), giftCertificateDTO.getLastUpdateDate(), giftCertificateDTO.getId());
+                    giftCertificateDTO.getPrice(), giftCertificateDTO.getDuration(), LocalDateTime.parse(giftCertificateDTO.getLastUpdateDate()), giftCertificateDTO.getId());
             return rows > 0L ? giftCertificateDTO.getId() : -1L;
         } catch (DataAccessException exception){
             String exceptionMessage = String.format("Update gift certificate by name=%s exception sql!", giftCertificateDTO.getName());
@@ -131,8 +133,7 @@ public class GiftCertificateDAOImpl implements GiftCertificateDAO {
     public List<GiftCertificate> searchByNameOrDescription(String part) throws DAOException {
         try{
             String sqlPart = PERCENT + part + PERCENT;
-            return jdbcTemplate.query(SELECT_BY_NAME_OR_DESCRIPTION_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class),
-                    sqlPart);
+            return jdbcTemplate.query(SELECT_BY_NAME_OR_DESCRIPTION_SQL, new BeanPropertyRowMapper<>(GiftCertificate.class), sqlPart, sqlPart);
         } catch (DataAccessException exception){
             String exceptionMessage = String.format("Find gift certificate by word=%s exception sql!", part);
             logger.error(exceptionMessage, exception);

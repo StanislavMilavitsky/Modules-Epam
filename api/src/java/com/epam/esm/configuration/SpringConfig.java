@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 @Configuration
 @ComponentScan("com.epam.esm")
 @EnableWebMvc
-@PropertySource("classpath:application-dev.properties")
+@PropertySource("classpath:application-${spring.profiles.active}.properties")
 public class SpringConfig implements EnvironmentAware {
     /**
      * Environment from spring container(environments get from application-dev.properties)

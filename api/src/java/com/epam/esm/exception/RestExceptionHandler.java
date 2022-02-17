@@ -29,6 +29,16 @@ public class RestExceptionHandler {
         return ResponseEntity.status(status).body(errorResponse);
     }
 
+
+      @ExceptionHandler(ControllerException.class)
+    private ResponseEntity<ErrorResponse> handleException(ControllerException exception) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErrorResponse errorResponse =
+                new ErrorResponse(exception.getLocalizedMessage(),
+                        status.value() * 10 + atomicInteger.getAndIncrement());
+        return ResponseEntity.status(status).body(errorResponse);
+    }
+
     /**
      * If we had IllegalArgumentException or IllegalStateException we catch then return our exception
      * @param exception runtime from api
@@ -38,4 +48,5 @@ public class RestExceptionHandler {
     private ResponseEntity<String> handleRuntimeException(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getLocalizedMessage());
     }
+
 }

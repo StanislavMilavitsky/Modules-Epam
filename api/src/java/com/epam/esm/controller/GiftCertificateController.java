@@ -37,11 +37,17 @@ public class GiftCertificateController {
      * @param id the id
      * @return the response entity
      * @throws ServiceException the service exception
+     * @throws ControllerException if id is incorrect
      */
     @GetMapping("/{id}")
-    public ResponseEntity<GiftCertificateDTO> find(@PathVariable(name = "id") Long id) throws ServiceException {
-        GiftCertificateDTO giftCertificateDTO = giftCertificateService.find(id);
-        return ResponseEntity.ok(giftCertificateDTO);
+    public ResponseEntity<GiftCertificateDTO> find(@PathVariable(name = "id") Long id) throws ServiceException, ControllerException {
+        if (id > 0){
+            GiftCertificateDTO giftCertificateDTO = giftCertificateService.find(id);
+            return ResponseEntity.ok(giftCertificateDTO);
+        } else {
+            logger.error("Negative id exception");
+            throw  new ControllerException("Negative id exception");
+        }
     }
 
     /**
@@ -50,13 +56,14 @@ public class GiftCertificateController {
      * @param giftCertificateDTO the certificate dto
      * @return the response entity
      * @throws ServiceException the service exception
+     * @throws ControllerException if entity fields not valid
      */
     @PostMapping(value = "/")
-    public ResponseEntity<GiftCertificateDTO> add(@RequestBody @Valid GiftCertificateDTO giftCertificateDTO,
-                                                  BindingResult bindingResult) throws ServiceException, ControllerException {
+    public ResponseEntity<GiftCertificateDTO> add(@RequestBody @Valid GiftCertificateDTO giftCertificateDTO, BindingResult bindingResult)
+            throws ServiceException, ControllerException {
         if (bindingResult.hasErrors()){
-            logger.error("Wrong value of fields gift certificate");
-            throw new ControllerException("Wrong value of fields gift certificate");
+            logger.error(bindingResultHandler(bindingResult));
+            throw new ControllerException(bindingResultHandler(bindingResult));
         }
         GiftCertificateDTO result = giftCertificateService.add(giftCertificateDTO);
         return ResponseEntity.ok(result);
@@ -68,13 +75,14 @@ public class GiftCertificateController {
      * @param giftCertificateDTO the certificate dto
      * @return the response entity
      * @throws ServiceException the service exception
+     * @throws ControllerException if entity fields not valid
      */
     @PutMapping(value = "/", consumes = "application/json")
     public ResponseEntity<GiftCertificateDTO> update(@RequestBody @Valid GiftCertificateDTO giftCertificateDTO,
                                                      BindingResult bindingResult) throws ServiceException, ControllerException {
         if (bindingResult.hasErrors()){
-            logger.error("Wrong value of fields gift certificate");
-            throw new ControllerException("Wrong value of fields gift certificate");
+            logger.error(bindingResultHandler(bindingResult));
+            throw new ControllerException(bindingResultHandler(bindingResult));
         }
         GiftCertificateDTO result = giftCertificateService.update(giftCertificateDTO);
         return ResponseEntity.ok(result);
@@ -86,11 +94,17 @@ public class GiftCertificateController {
      * @param id the id
      * @return the response entity
      * @throws ServiceException the service exception
+     * @throws ControllerException if id is incorrect
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) throws ServiceException {
-        long result = giftCertificateService.delete(id);
-        return result != -1L ? ResponseEntity.ok("Delete successful!") : ResponseEntity.ok("Delete unsuccessful!");
+    public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) throws ServiceException, ControllerException {
+        if (id > 0) {
+            long result = giftCertificateService.delete(id);
+            return result != -1L ? ResponseEntity.ok("Delete successful!") : ResponseEntity.ok("Delete unsuccessful!");
+        } else {
+            throw new ControllerException("Negative id exception");
+        }
+
     }
 
     /**
@@ -143,5 +157,15 @@ public class GiftCertificateController {
     public ResponseEntity<List<GiftCertificateDTO>> sortByDate(@PathVariable(name = "sort") SortType sortType) throws ServiceException {
         List<GiftCertificateDTO> giftCertificateDTO = giftCertificateService.sortByDate(sortType);
         return ResponseEntity.ok(giftCertificateDTO);
+    }
+
+    /**
+     * Get default message by validate exception
+     *
+     * @param bindingResult exceptions of validate
+     * @return string default message of exception
+     */
+    private String bindingResultHandler(BindingResult bindingResult){
+        return bindingResult.getAllErrors().get(0).getDefaultMessage();
     }
 }
