@@ -37,7 +37,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             GiftCertificate giftCertificate = giftCertificateDAO.read(id);
             return giftCertificateConverter.toDTO(giftCertificate);
         } catch (DAOException exception) {
-            String exceptionMessage = String.format("Find gift certificate by id=%d exception!", id);
+            String exceptionMessage = String.format("Cant find gift certificate by id=%d !", id);
             logger.error(exceptionMessage, exception);
             throw new ServiceException(exceptionMessage, exception);
         }

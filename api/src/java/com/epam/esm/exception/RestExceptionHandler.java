@@ -1,5 +1,7 @@
 package com.epam.esm.exception;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,40 +15,72 @@ import java.util.concurrent.atomic.AtomicInteger;
 @RestControllerAdvice
 public class RestExceptionHandler {
 
+    private static final HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+    private static final HttpStatus notFound = HttpStatus.NOT_FOUND;
+
     private final AtomicInteger atomicInteger = new AtomicInteger();
 
     /**
      * If api throw service exception we create our custom exception and code auto increment for all users
+     *
      * @param exception from service
      * @return our custom exception
      */
     @ExceptionHandler(ServiceException.class)
-    private ResponseEntity<ErrorResponse> handleException(ServiceException exception) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        ErrorResponse errorResponse =
-                new ErrorResponse(exception.getLocalizedMessage(),
-                        status.value() * 10 + atomicInteger.getAndIncrement());
-        return ResponseEntity.status(status).body(errorResponse);
+    private ResponseEntity<ErrorResponse> handlerServiceException(ServiceException exception) {
+        ErrorResponse errorResponse = errorResponseHandler(exception, notFound);
+        return ResponseEntity.status(notFound).body(errorResponse);
     }
 
+    /**
+     * If we had Controller we catch then return our exception
+     *
+     * @param exception runtime from api that illegal validation
+     * @return custom exception
+     */
 
-      @ExceptionHandler(ControllerException.class)
-    private ResponseEntity<ErrorResponse> handleException(ControllerException exception) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        ErrorResponse errorResponse =
-                new ErrorResponse(exception.getLocalizedMessage(),
-                        status.value() * 10 + atomicInteger.getAndIncrement());
-        return ResponseEntity.status(status).body(errorResponse);
+    @ExceptionHandler(ControllerException.class)
+    private ResponseEntity<ErrorResponse> handlerControllerException(ControllerException exception) {
+        ErrorResponse errorResponse = errorResponseHandler(exception, notFound);
+        return ResponseEntity.status(badRequest).body(errorResponse);
     }
 
     /**
      * If we had IllegalArgumentException or IllegalStateException we catch then return our exception
+     *
      * @param exception runtime from api
      * @return custom exception
      */
     @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
-    private ResponseEntity<String> handleRuntimeException(RuntimeException exception) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getLocalizedMessage());
+    private ResponseEntity<ErrorResponse> handlerRuntimeException(RuntimeException exception) {
+        String errormessage = "Illegal argument exception. " + exception.getLocalizedMessage(); //todo
+        Integer errorCode = badRequest.value() * 10 + atomicInteger.getAndIncrement();
+        ErrorResponse errorResponse = new ErrorResponse(errormessage, errorCode);
+        return ResponseEntity.status(badRequest).body(errorResponse);
+    }
+
+    /**
+     * If we had IllegalArgumentException or IllegalStateException we catch then return our exception
+     *
+     * @param exception runtime from api if input parameters bad
+     * @return custom exception
+     */
+    @ExceptionHandler({JsonParseException.class, InvalidFormatException.class})
+    private ResponseEntity<ErrorResponse> handlerInputException(RuntimeException exception) {
+        String errormessage = "Illegal argument exception. " + exception.getLocalizedMessage(); //todo
+        Integer errorCode = badRequest.value() * 10 + atomicInteger.getAndIncrement();
+        ErrorResponse errorResponse = new ErrorResponse(errormessage, errorCode);
+        return ResponseEntity.status(badRequest).body(errorResponse);
+    }
+
+    /**
+     * @param exception from others exceptions classes
+     * @param status    is
+     * @return Custom entity exception
+     */
+    private ErrorResponse errorResponseHandler(Exception exception, HttpStatus status) {
+        return new ErrorResponse(exception.getLocalizedMessage(), status.value() * 10
+                + atomicInteger.getAndIncrement());
     }
 
 }

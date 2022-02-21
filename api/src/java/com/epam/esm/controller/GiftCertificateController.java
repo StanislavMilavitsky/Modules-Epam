@@ -9,6 +9,7 @@ import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.impl.GiftCertificateServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -100,7 +101,9 @@ public class GiftCertificateController {
     public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) throws ServiceException, ControllerException {
         if (id > 0) {
             long result = giftCertificateService.delete(id);
-            return result != -1L ? ResponseEntity.ok("Delete successful!") : ResponseEntity.ok("Delete unsuccessful!");
+            String deleteSuccessful = String.format("Delete by id=%d successful!", id);
+            String deleteUnsuccessful = String.format("Delete by id=%d successful!", id);
+            return result != -1L ? ResponseEntity.ok(deleteSuccessful) : ResponseEntity.ok(deleteUnsuccessful);
         } else {
             throw new ControllerException("Negative id exception");
         }
@@ -114,10 +117,10 @@ public class GiftCertificateController {
      * @return the response entity
      * @throws ServiceException the service exception
      */
-    @GetMapping("/list-name/{name}")
-    public ResponseEntity<List<GiftCertificateDTO>> findByTag(@PathVariable(name = "name") String tagName)
+    @GetMapping("/search-name")
+    public ResponseEntity<List<GiftCertificateDTO>> findByTag(@RequestParam(name = "name") String tagName)
             throws ServiceException {
-        List<GiftCertificateDTO> giftCertificateDTO = giftCertificateService.findByTag(tagName);
+        List<GiftCertificateDTO>giftCertificateDTO = giftCertificateService.findByTag(tagName);
         return ResponseEntity.ok(giftCertificateDTO);
     }
 
@@ -128,8 +131,8 @@ public class GiftCertificateController {
      * @return the response entity
      * @throws ServiceException the service exception
      */
-    @GetMapping("/list-part/{part}")
-    public ResponseEntity<List<GiftCertificateDTO>> searchByNameOrDesc(@PathVariable(name = "part") String part)
+    @GetMapping("/search-part")
+    public ResponseEntity<List<GiftCertificateDTO>> searchByNameOrDesc(@RequestParam(name = "part") String part)
             throws ServiceException {
         List<GiftCertificateDTO> giftCertificateDTO = giftCertificateService.searchByNameOrDescription(part);
         return ResponseEntity.ok(giftCertificateDTO);
@@ -141,8 +144,8 @@ public class GiftCertificateController {
      * @return the response entity
      * @throws ServiceException the service exception
      */
-    @GetMapping("/sorted-name-list{sort}")
-    public ResponseEntity<List<GiftCertificateDTO>> sortByName(@PathVariable(name = "sort") SortType sortType) throws ServiceException {
+    @GetMapping("/sort-by-name")
+    public ResponseEntity<List<GiftCertificateDTO>> sortByName(@RequestParam(name = "sort") SortType sortType) throws ServiceException {
         List<GiftCertificateDTO> giftCertificateDTO = giftCertificateService.sortByName(sortType);
         return ResponseEntity.ok(giftCertificateDTO);
     }
@@ -153,8 +156,8 @@ public class GiftCertificateController {
      * @return the response entity
      * @throws ServiceException the service exception
      */
-    @GetMapping("/sorted-date-list{sort}")
-    public ResponseEntity<List<GiftCertificateDTO>> sortByDate(@PathVariable(name = "sort") SortType sortType) throws ServiceException {
+    @GetMapping("/sort-by-date")
+    public ResponseEntity<List<GiftCertificateDTO>> sortByDate(@RequestParam(name = "sort") SortType sortType) throws ServiceException {
         List<GiftCertificateDTO> giftCertificateDTO = giftCertificateService.sortByDate(sortType);
         return ResponseEntity.ok(giftCertificateDTO);
     }

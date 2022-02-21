@@ -55,7 +55,7 @@ public class TagController {
      * @throws ServiceException the service exception
      * @throws ControllerException if tag name incorrect
      */
-    @PostMapping(value = "/", consumes = "application/json")
+    @PostMapping(consumes = "application/json")
     public ResponseEntity<TagDTO> add(@RequestBody @Valid TagDTO tagName, BindingResult bindingResult) throws ServiceException, ControllerException {
         if (bindingResult.hasErrors()){
             logger.error(bindingResultHandler(bindingResult));
@@ -77,7 +77,9 @@ public class TagController {
     public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) throws ServiceException, ControllerException {
         if (id > 0) {
             long result = tagService.delete(id);
-            return result != -1L ? ResponseEntity.ok("Delete successful!") : ResponseEntity.ok("Delete unsuccessful!");
+            String deleteSuccessful = String.format("Delete by id=%d successful!", id);
+            String deleteUnsuccessful = String.format("Delete by id=%d successful!", id);
+            return result != -1L ? ResponseEntity.ok(deleteSuccessful) : ResponseEntity.ok(deleteUnsuccessful);
 
         } else {
             logger.error("Negative id exception");
