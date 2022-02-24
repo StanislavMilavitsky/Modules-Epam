@@ -102,7 +102,7 @@ public class GiftCertificateController {
         if (id > 0) {
             long result = giftCertificateService.delete(id);
             String deleteSuccessful = String.format("Delete by id=%d successful!", id);
-            String deleteUnsuccessful = String.format("Delete by id=%d successful!", id);
+            String deleteUnsuccessful = String.format("Delete by id=%d unsuccessful!", id);
             return result != -1L ? ResponseEntity.ok(deleteSuccessful) : ResponseEntity.ok(deleteUnsuccessful);
         } else {
             throw new ControllerException("Negative id exception");
