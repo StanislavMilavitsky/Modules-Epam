@@ -1,9 +1,14 @@
 package com.epam.esm.entity;
 
+import com.epam.esm.dao.AuditListener;
+
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.EntityListeners;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
@@ -15,6 +20,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder(toBuilder = true)
+@EntityListeners(AuditListener.class)
 public class Tag implements Serializable {
 
     @Positive(message = "Should be positive")

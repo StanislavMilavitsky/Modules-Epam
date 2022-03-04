@@ -1,7 +1,11 @@
 package com.epam.esm.service;
 
 import com.epam.esm.dto.TagDTO;
+import com.epam.esm.exception.IncorrectArgumentException;
+import com.epam.esm.exception.NotExistEntityException;
 import com.epam.esm.exception.ServiceException;
+
+import java.util.List;
 
 /**
  * Service layer use methods from dao layer
@@ -28,5 +32,9 @@ public interface TagService {
      * @return Id if the rows have changed and -1 if the rows have not changed
      * @throws ServiceException if id is not found
      */
-    long delete(Long id) throws ServiceException;
+    void delete(Long id) throws ServiceException, NotExistEntityException;
+
+    List<TagDTO> findAll(int page, int size) throws ServiceException, IncorrectArgumentException;
+
+    long count() throws ServiceException;
 }

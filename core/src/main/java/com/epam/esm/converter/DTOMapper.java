@@ -5,7 +5,7 @@ package com.epam.esm.converter;
  * @param <T> is Entity from layer service and fields can be change with layer service
  * @param <K> is Entity from layer dao and fields should not change
  */
-public interface Converter <T, K> {
+public interface DTOMapper<T, K> {
     /**
      * Converter entity in dto(entity service)
      * @param k entity from dao

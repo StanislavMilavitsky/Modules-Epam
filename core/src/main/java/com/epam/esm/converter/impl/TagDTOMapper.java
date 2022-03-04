@@ -1,12 +1,12 @@
 package com.epam.esm.converter.impl;
 
-import com.epam.esm.converter.Converter;
+import com.epam.esm.converter.DTOMapper;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.entity.Tag;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TagConverter implements Converter<TagDTO, Tag> {
+public class TagDTOMapper implements DTOMapper<TagDTO, Tag> {
     @Override
     public TagDTO toDTO(Tag tag) {
         TagDTO tagDTO = new TagDTO();

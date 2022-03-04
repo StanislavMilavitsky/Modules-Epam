@@ -1,9 +1,9 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.converter.impl.GiftCertificateConverter;
+import com.epam.esm.converter.impl.GiftCertificateDTOMapper;
 import com.epam.esm.dao.GiftCertificateDAO;
 import com.epam.esm.dto.GiftCertificateDTO;
-import com.epam.esm.entity.SortType;
+import com.epam.esm.common.SortType;
 import com.epam.esm.exception.DAOException;
 import com.epam.esm.exception.ServiceException;
 import com.epam.esm.service.GiftCertificateService;
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.epam.esm.entity.SortType.*;
+import static com.epam.esm.common.SortType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,14 +34,14 @@ class GiftCertificateServiceImplTest {
 
     @Mock
     GiftCertificateDAO dao;
-    GiftCertificateConverter converter;
+    GiftCertificateDTOMapper converter;
     GiftCertificateService service;
     GiftCertificate giftCertificate;
     GiftCertificateDTO giftGiftCertificateDTO;
 
     @BeforeEach
     public void setUp() {
-        converter = new GiftCertificateConverter();
+        converter = new GiftCertificateDTOMapper();
         service = new GiftCertificateServiceImpl(dao, converter);
         giftCertificate = new GiftCertificate(1L, "name", "description", new BigDecimal("50"),
                 12, LocalDateTime.parse("2022-03-15T12:15:00"), LocalDateTime.parse("2022-05-10T12:15:00"));

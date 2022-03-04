@@ -2,7 +2,7 @@ package com.epam.esm.controller;
 
 
 import com.epam.esm.dto.GiftCertificateDTO;
-import com.epam.esm.entity.SortType;
+import com.epam.esm.common.SortType;
 import com.epam.esm.exception.ControllerException;
 import com.epam.esm.exception.ServiceException;
 import com.epam.esm.service.GiftCertificateService;

@@ -1,6 +1,6 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.converter.impl.TagConverter;
+import com.epam.esm.converter.impl.TagDTOMapper;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.entity.Tag;
@@ -24,14 +24,14 @@ class TagServiceImplTest {
 
     @Mock
     TagDAO tagDAO;
-    TagConverter tagConverter;
+    TagDTOMapper tagConverter;
     TagService tagService;
     Tag correctTag;
     TagDTO correctTagDTO;
 
     @BeforeEach
     void setUp() {
-        tagConverter = new TagConverter();
+        tagConverter = new TagDTOMapper();
         tagService = new TagServiceImpl(tagDAO, tagConverter);
         correctTag = new Tag(1L, "name");
         correctTagDTO = new TagDTO(1L, "name");

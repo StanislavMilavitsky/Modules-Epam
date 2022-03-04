@@ -1,10 +1,10 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.converter.impl.GiftCertificateConverter;
+import com.epam.esm.converter.impl.GiftCertificateDTOMapper;
 import com.epam.esm.dao.GiftCertificateDAO;
 import com.epam.esm.dto.GiftCertificateDTO;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.SortType;
+import com.epam.esm.common.SortType;
 import com.epam.esm.exception.DAOException;
 import com.epam.esm.exception.ServiceException;
 import com.epam.esm.service.GiftCertificateService;
@@ -24,9 +24,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     private final static Logger logger = LogManager.getLogger(GiftCertificateServiceImpl.class);
     private final GiftCertificateDAO giftCertificateDAO;
-    private final GiftCertificateConverter giftCertificateConverter;
+    private final GiftCertificateDTOMapper giftCertificateConverter;
 
-    public GiftCertificateServiceImpl(GiftCertificateDAO giftCertificateDAO, GiftCertificateConverter giftCertificateConverter) {
+    public GiftCertificateServiceImpl(GiftCertificateDAO giftCertificateDAO, GiftCertificateDTOMapper giftCertificateConverter) {
         this.giftCertificateDAO = giftCertificateDAO;
         this.giftCertificateConverter = giftCertificateConverter;
     }
