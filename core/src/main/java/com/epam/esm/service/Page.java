@@ -2,6 +2,9 @@ package com.epam.esm.service;
 
 import com.epam.esm.exception.IncorrectArgumentException;
 
+/**
+ * Page entity
+ */
 public class Page {
 
     private final int page;

@@ -6,6 +6,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
+/**
+ * Creates a connection between entities and a spring
+ */
 @Service
 public class BeanUtil implements ApplicationContextAware {
 

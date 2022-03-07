@@ -29,12 +29,24 @@ public interface TagService {
     /**
      * Use method delete from dao layer
      * @param id field entity
-     * @return Id if the rows have changed and -1 if the rows have not changed
      * @throws ServiceException if id is not found
      */
     void delete(Long id) throws ServiceException, NotExistEntityException;
 
+    /**
+     * Find all tags
+     * @param page page
+     * @param size size tags on page
+     * @return list of tags
+     * @throws ServiceException if tags have not been find
+     * @throws IncorrectArgumentException if arguments incorrect
+     */
     List<TagDTO> findAll(int page, int size) throws ServiceException, IncorrectArgumentException;
 
+    /**
+     * Count of tags
+     * @return count of tags
+     * @throws ServiceException if cant sum count of tags
+     */
     long count() throws ServiceException;
 }

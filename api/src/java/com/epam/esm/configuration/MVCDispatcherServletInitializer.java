@@ -5,11 +5,13 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
-/**
- * Initialize web project and use configuration
- */
 public class MVCDispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
+    /**
+     * Set properties for user app
+     * @param servletContext provides access to web application parameters
+     * @throws ServletException if cant give access
+     */
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         super.onStartup(servletContext);
@@ -23,7 +25,7 @@ public class MVCDispatcherServletInitializer extends AbstractAnnotationConfigDis
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[]{SpringConfig.class};
+        return new Class[]{ApplicationConfig.class};
     }
 
     @Override

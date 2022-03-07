@@ -43,8 +43,21 @@ public interface GiftCertificateService {
      */
     void delete(Long id) throws ServiceException, NotExistEntityException;
 
-
+    /**
+     * Filter list by params
+     * @param filterParams params from request for filter
+     * @param page
+     * @param size
+     * @return Filtered list gift certificate
+     * @throws ServiceException filter by parameters wrong
+     * @throws IncorrectArgumentException if incorrect argument
+     */
     List <GiftCertificateDTO> filterByParameters(FilterParams filterParams, int page, int size) throws ServiceException, IncorrectArgumentException;
 
+    /**
+     * Count of certificate
+     * @return count certificate
+     * @throws ServiceException if cant sum count
+     */
     long count() throws ServiceException;
 }

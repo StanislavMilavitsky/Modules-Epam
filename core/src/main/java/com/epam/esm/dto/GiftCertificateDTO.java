@@ -1,6 +1,7 @@
 package com.epam.esm.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -9,14 +10,16 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 /**
- * Entity service and can be change
+ * Entity service
  */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder(toBuilder = true)
 public class GiftCertificateDTO {
 
     @Positive(message = "Should be positive")
@@ -40,4 +43,6 @@ public class GiftCertificateDTO {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.s")
     private String lastUpdateDate;
+
+    private List<TagDTO> tags;
 }

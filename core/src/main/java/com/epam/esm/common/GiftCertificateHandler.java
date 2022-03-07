@@ -8,6 +8,9 @@ import java.util.Map;
 import static com.epam.esm.common.GiftCertificateConstant.*;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
+/**
+ * Checks whether the parameters have changed
+ */
 public class GiftCertificateHandler {
 
     private GiftCertificateHandler(){

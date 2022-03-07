@@ -2,31 +2,34 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.exception.ControllerException;
+import com.epam.esm.exception.IncorrectArgumentException;
+import com.epam.esm.exception.NotExistEntityException;
 import com.epam.esm.exception.ServiceException;
 import com.epam.esm.service.TagService;
-import com.epam.esm.service.impl.GiftCertificateServiceImpl;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Tag RestAPI.
  */
 @RestController
 @RequestMapping("/tag")
-public class TagController {
+@Slf4j
+public class TagController extends CommonController<TagDTO> {
 
     private final TagService tagService;
 
     private TagController(TagService tagService) {
         this.tagService = tagService;
     }
-
-    private final static Logger logger = LogManager.getLogger(GiftCertificateServiceImpl.class);
 
     /**
      * Find tag by id.
@@ -42,7 +45,7 @@ public class TagController {
             TagDTO tag = tagService.find(id);
             return ResponseEntity.ok(tag);
         } else {
-            logger.error("Negative id exception");
+            log.error("Negative id exception");
             throw  new ControllerException("Negative id exception");
         }
     }
@@ -58,7 +61,7 @@ public class TagController {
     @PostMapping(consumes = "application/json")
     public ResponseEntity<TagDTO> add(@RequestBody @Valid TagDTO tagName, BindingResult bindingResult) throws ServiceException, ControllerException {
         if (bindingResult.hasErrors()){
-            logger.error(bindingResultHandler(bindingResult));
+            log.error(bindingResultHandler(bindingResult));
             throw new ControllerException(bindingResultHandler(bindingResult));
         }
         TagDTO result = tagService.add(tagName);
@@ -74,17 +77,38 @@ public class TagController {
      * @throws ControllerException if id is incorrect
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) throws ServiceException, ControllerException {
+    public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) throws ServiceException, ControllerException, NotExistEntityException {
         if (id > 0) {
-            long result = tagService.delete(id);
-            String deleteSuccessful = String.format("Delete by id=%d successful!", id);
-            String deleteUnsuccessful = String.format("Delete by id=%d unsuccessful!", id);
-            return result != -1L ? ResponseEntity.ok(deleteSuccessful) : ResponseEntity.ok(deleteUnsuccessful);
+            tagService.delete(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
         } else {
-            logger.error("Negative id exception");
+            log.error("Negative id exception");
             throw  new ControllerException("Negative id exception");
         }
+    }
+
+    /**
+     * Find all tags
+     *
+     * @param page page
+     * @param size tags on page
+     * @return list of tags
+     * @throws ServiceException if cant find
+     * @throws IncorrectArgumentException if incorrect argument
+     */
+    @Override
+    @GetMapping
+    public ResponseEntity<PagedModel<TagDTO>> findAll(
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "3") int size
+    ) throws ServiceException, IncorrectArgumentException {
+        List<TagDTO> tags = tagService.findAll(page, size);
+        long count = tagService.count();
+        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(size, page, count);
+        List<Link> linkList = buildLink(page, size, (int) pageMetadata.getTotalPages());
+        PagedModel<TagDTO> pagedModel = PagedModel.of(tags, pageMetadata, linkList);
+        return ResponseEntity.ok(pagedModel);
     }
 
     /**

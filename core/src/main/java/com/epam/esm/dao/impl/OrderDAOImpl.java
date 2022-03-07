@@ -47,6 +47,7 @@ public class OrderDAOImpl extends GenericDAOImpl<Order> implements OrderDAO {
     public Tag getTopUserTag() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Object> query = builder.createQuery();
+
         Root<User> root = query.from(User.class);
         Join<Object, Object> join = root.join("orders").join("orderGiftCertificates");
         Expression<Number> prod = builder.prod(join.get("quantity"), join.get("oneCost"));

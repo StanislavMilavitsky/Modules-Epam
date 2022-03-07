@@ -11,6 +11,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+/**
+ * Entity dao
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

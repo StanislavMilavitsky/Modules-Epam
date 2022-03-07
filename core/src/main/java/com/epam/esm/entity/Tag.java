@@ -10,9 +10,8 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 /**
- * Entity dao and the fields should not change
+ * Entity dao
  */
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data

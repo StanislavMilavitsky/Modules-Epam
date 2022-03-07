@@ -14,6 +14,9 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 import java.time.LocalDateTime;
 
+/**
+ * This class enters a class into the database, who does and when does a certain operation
+ */
 public class AuditListener {
 
     @PostPersist
@@ -28,10 +31,14 @@ public class AuditListener {
 
     @PostRemove
     private void beforeRemoveOperation(Object object) {
-        persistAudit("REMOVE", object);
+        persistAudit("Remove", object);
     }
 
-
+    /**
+     * Build entity audit
+     * @param operation for sql
+     * @param object class that make operation
+     */
     public void persistAudit(String operation, Object object) {
         GenericEntity entity = (GenericEntity) object;
         Audit audit = Audit.builder()

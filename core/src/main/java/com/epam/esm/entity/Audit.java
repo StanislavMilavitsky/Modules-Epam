@@ -14,6 +14,9 @@ import javax.persistence.Id;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entity for audit request
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
