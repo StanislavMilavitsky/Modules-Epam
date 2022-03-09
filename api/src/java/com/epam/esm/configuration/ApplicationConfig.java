@@ -54,7 +54,7 @@ public class ApplicationConfig {
         dataSource.setDriverClassName(environment.getProperty("datasource.driverClassName"));
         dataSource.setUrl(environment.getProperty("datasource.url"));
         dataSource.setUsername(environment.getProperty("datasource.username"));
-        dataSource.setPassword(environment.getProperty("datasource.password.env"));
+        dataSource.setPassword(environment.getProperty("datasource.password"));
         return dataSource;
     }
 
@@ -67,7 +67,7 @@ public class ApplicationConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
         entityManager.setDataSource(dataSource);
-        entityManager.setPackagesToScan("com.epam.esm.model.dao.entity");
+        entityManager.setPackagesToScan("com.epam.esm.core.entity");
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         entityManager.setJpaVendorAdapter(vendorAdapter);
         Properties properties = new Properties();

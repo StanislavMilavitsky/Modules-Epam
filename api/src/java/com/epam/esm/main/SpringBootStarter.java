@@ -9,4 +9,5 @@ public class SpringBootStarter {
     public static void main(String[] args) {
         SpringApplication.run(SpringBootStarter.class, args);
     }
+
 }
