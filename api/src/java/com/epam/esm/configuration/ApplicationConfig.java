@@ -11,7 +11,7 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -20,7 +20,7 @@ import java.util.Properties;
  * Spring configuration with beans for spring
  */
 @Configuration
-@EnableWebMvc
+@EnableTransactionManagement
 @PropertySource("classpath:application-${spring.profiles.active}.properties")
 public class ApplicationConfig {
     /**
@@ -67,7 +67,7 @@ public class ApplicationConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
         entityManager.setDataSource(dataSource);
-        entityManager.setPackagesToScan("com.epam.esm.core.entity");
+        entityManager.setPackagesToScan("com.epam.esm.entity");
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         entityManager.setJpaVendorAdapter(vendorAdapter);
         Properties properties = new Properties();

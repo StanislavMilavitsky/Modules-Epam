@@ -1,5 +1,6 @@
 package com.epam.esm.controller;
 
+
 import com.epam.esm.dto.OrderDTO;
 import com.epam.esm.dto.TagDTO;
 import com.epam.esm.dto.UserDTO;
@@ -51,8 +52,8 @@ public class UserController extends CommonController<UserDTO> {
                 UserDTO userDTO = userService.find(id);
                 return ResponseEntity.ok(userDTO);
             } else {
-                log.error("Negative id exception");
-                throw  new ControllerException("Negative id exception");
+                log.error("Negative id exception!");
+                throw  new ControllerException("Negative id exception!");
             }
     }
 
@@ -75,8 +76,8 @@ public class UserController extends CommonController<UserDTO> {
             OrderDTO order = orderService.add(orderDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(order);
         } else {
-            log.error("Negative id exception");
-            throw  new ControllerException("Negative id exception");
+            log.error("Negative id exception!");
+            throw  new ControllerException("Negative id exception!");
         }
 
     }

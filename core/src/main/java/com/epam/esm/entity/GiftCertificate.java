@@ -20,7 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Data
 @Builder(toBuilder = true)
-@EntityListeners(AuditListener.class)
+//@EntityListeners(AuditListener.class)
 @Entity(name = "gift_certificate")
 public class GiftCertificate extends GenericEntity {
 

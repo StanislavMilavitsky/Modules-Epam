@@ -28,7 +28,7 @@ public class OrderDAOImpl extends GenericDAOImpl<Order> implements OrderDAO {
                 .timeOfPurchase(order.getTimeOfPurchase())
                 .orderGiftCertificates(new HashSet<>())
                 .build();
-        entityManager.persist(order);
+        entityManager.persist(orderBuild);
         Set<OrderGiftCertificate> orderGiftCertificates = order.getOrderGiftCertificates();
         if (!orderGiftCertificates.isEmpty()) {
             Order orderId = Order.builder().id(orderBuild.getId()).build();
@@ -48,6 +48,21 @@ public class OrderDAOImpl extends GenericDAOImpl<Order> implements OrderDAO {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Object> query = builder.createQuery();
 
+          /*
+          SELECT t.id ,t.name,sum(oc.quantity) FROM  order o
+          join order_gift_certificate oc on o.id=oc.id
+          join gift_certificate gc on oc.id_certificate=gc.id
+          join gift_certificate_has_tag tc on gc.id=tc.id_certificate
+          join tag t on tc.id_tag=t.id
+          where o.user_id=
+          (SELECT u.id  FROM user u
+          join  order o on u.id = o.id
+          join order_gift_certificate oc on c.id_order = o.user_id
+          group by u.id
+          order by sum(oc.quantity*oc.one_cost) desc limit 1)
+          group by t.name limit 1
+         */
+
         Root<User> root = query.from(User.class);
         Join<Object, Object> join = root.join("orders").join("orderGiftCertificates");
         Expression<Number> prod = builder.prod(join.get("quantity"), join.get("oneCost"));
@@ -59,10 +74,10 @@ public class OrderDAOImpl extends GenericDAOImpl<Order> implements OrderDAO {
         CriteriaQuery<Tuple> orderQuery = builder.createTupleQuery();
         Root<Order> orderRoot = orderQuery.from(Order.class);
         Join<Object, Object> tagJoin = orderRoot.join("orderGiftCertificates")
-                .join("").join("tags");
+                .join("giftCertificate").join("tags");
         orderQuery.select(builder.tuple(tagJoin.get("id"), tagJoin.get("name")))
                 .where(builder.equal(orderRoot.get("userId"), userId))
-                .groupBy(tagJoin.get("name"));
+                .groupBy(tagJoin.get("id"));
         Optional<Tuple> tuple = entityManager.createQuery(orderQuery)
                 .setMaxResults(1)
                 .getResultList().stream().findFirst();

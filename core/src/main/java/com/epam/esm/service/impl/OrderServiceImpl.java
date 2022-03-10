@@ -35,8 +35,8 @@ public class OrderServiceImpl implements OrderService {
     public OrderDTO add(OrderDTO orderDTO) throws ServiceException {
         try {
             Order order = orderDTOMapper.fromDTO(orderDTO);
-            Order orderDb = orderDAO.create(order);
-            return orderDTOMapper.toDTO(orderDb);
+            Order orderDB = orderDAO.create(order);
+            return orderDTOMapper.toDTO(orderDB);
         } catch (DataAccessException exception) {
             String exceptionMessage = "Create order service exception!";
             log.error(exceptionMessage, exception);

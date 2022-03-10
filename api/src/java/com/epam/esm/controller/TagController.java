@@ -21,13 +21,13 @@ import java.util.List;
  * Tag RestAPI.
  */
 @RestController
-@RequestMapping("/tag")
+@RequestMapping("/tags")
 @Slf4j
 public class TagController extends CommonController<TagDTO> {
 
     private final TagService tagService;
 
-    private TagController(TagService tagService) {
+    public TagController(TagService tagService) {
         this.tagService = tagService;
     }
 

@@ -34,7 +34,7 @@ public class GiftCertificateController {
 
     private final GiftCertificateService giftCertificateService;
 
-    private GiftCertificateController(GiftCertificateService giftCertificateService) {
+    public GiftCertificateController(GiftCertificateService giftCertificateService) {
         this.giftCertificateService = giftCertificateService;
     }
 
